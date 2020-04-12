@@ -1,0 +1,24 @@
+DND APP:
+* LFG/LFP
+* Calendar
+	* block out conflicts
+	* show scheduled games
+	* auto scheduler
+	* suggest dates and allow voting
+* DM
+	* places
+	* npc's
+	* shops
+		* allow cloning other shops
+* Campaigns
+	* people
+	* schedule
+	* previous sessions with places and recap
+	* map
+	* pc descriptions
+
+
+
+
+curl -i -H "Content-Type: application/json" -X PUT -d "{\"status\": \"2\"}" http://localhost:5000/campaigns/1
+
