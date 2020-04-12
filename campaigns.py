@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, abort, request
+from flask import jsonify, abort, request, Blueprint
 import datetime
-app = Flask(__name__)
+
+
+campaigns_api = Blueprint("campaigns_api", __name__)
 
 
 campaigns = [
@@ -79,13 +81,13 @@ campaigns = [
 ]
 
 
-@app.route('/campaigns', methods=['GET'])
+@campaigns_api.route('', methods=['GET'])
 def get_campaigns():
     active_campaigns = [campaign for campaign in campaigns if campaign['status'] != 2]
     return jsonify({'campaign': active_campaigns})
 
 
-@app.route('/campaigns/<int:campaignId>', methods=['GET'])
+@campaigns_api.route('/<int:campaignId>', methods=['GET'])
 def get_campaign_by_id(campaign_id):
     campaign = [campaign for campaign in campaigns if campaign['id'] == campaign_id and campaign['status'] != 2]
     if len(campaign) == 0:
@@ -94,7 +96,7 @@ def get_campaign_by_id(campaign_id):
     return jsonify({'campaign': campaign[0]})
 
 
-@app.route('/campaigns', methods=['POST'])
+@campaigns_api.route('', methods=['POST'])
 def new_campaign():
     campaign = {
         'id': campaigns[-1]['id'] + 1,
@@ -107,7 +109,7 @@ def new_campaign():
     return jsonify({'campaign': campaign}), 201
 
 
-@app.route('/campaigns/<int:campaignId>', methods=['PUT'])
+@campaigns_api.route('/<int:campaignId>', methods=['PUT'])
 def update_campaign(campaign_id):
     campaign = [campaign for campaign in campaigns if campaign['id'] == campaign_id]
     if len(campaign) == 0:
@@ -123,7 +125,7 @@ def update_campaign(campaign_id):
     return jsonify({'campaign': campaign[0]})
 
 
-@app.route('/campaigns/<int:campaignId>', methods=['DELETE'])
+@campaigns_api.route('/<int:campaignId>', methods=['DELETE'])
 def remove_campaign(campaign_id):
     campaign = [campaign for campaign in campaigns if campaign['id'] == campaign_id]
     if len(campaign) == 0:
@@ -132,7 +134,3 @@ def remove_campaign(campaign_id):
     campaign[0]['status'] = 2
 
     return jsonify({'successfullyDeleted:': campaign_id})
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
